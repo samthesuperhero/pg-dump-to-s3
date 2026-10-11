@@ -1,0 +1,64 @@
+# --- Secrets: never commit credential material -------------------------------
+# Secrets live as 0400 files under /etc/pg-dump-to-s3/ on the host, never in-repo.
+*.secret
+*.db-password
+*.s3-access-key-id
+*.s3-secret-access-key
+secrets/
+local_config/
+
+# --- Python virtualenvs -------------------------------------------------------
+.venv/
+venv/
+env/
+.python-version
+
+# --- Build / packaging artifacts ---------------------------------------------
+build/
+dist/
+*.egg-info/
+*.egg
+__pycache__/
+*.py[cod]
+
+# --- Tooling caches -----------------------------------------------------------
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+
+# --- Local runtime / data / backup scratch ------------------------------------
+*.log
+*.pid
+*.sock
+data/
+logs/
+scratch/
+*.tar
+*.zst
+*.dump
+
+# --- Live config written on the host (never the committed example) -----------
+# config.example.ini IS committed; the live, possibly-edited copy is not.
+/pg-dump-to-s3.ini
+/pg-dump-to-s3.ini.bak
+/pg-dump-to-s3.ini.new
+
+# --- Editor / OS cruft --------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# --- Agent / tooling local overrides ------------------------------------------
+# Shared .claude/settings.json is committed; machine-local overrides are not.
+.claude/settings.local.json
+# Agent-memory: project memory is committed; personal/global memory uses a
+# `local.` filename prefix and stays out of git.
+docs/agent-memory/local.*
+MEMORY.local.md

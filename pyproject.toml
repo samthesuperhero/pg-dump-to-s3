@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pg-dump-to-s3"
+description = "Headless Linux daemon that backs up a PostgreSQL cluster to S3-compatible storage via pg_dump."
+readme = "README.md"
+requires-python = ">=3.14"
+license = { file = "LICENSE" }
+# Version is single-sourced from the VERSION file (see docs/CONVENTIONS.md).
+dynamic = ["version"]
+
+# Pin third-party dependencies with >= lower bounds only: no upper caps, no == / ~=.
+# Declare every import, even one that is currently transitive.
+dependencies = [
+    "asyncpg>=0.30",   # enumerate cluster databases (async, no ORM)
+    "boto3>=1.34",     # S3-compatible object storage client
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.setuptools.dynamic]
+version = { file = "VERSION" }
+
+# src-layout: the importable package will live at src/pg_dump_to_s3/ (added in a
+# later task). No modules exist yet; this records the layout convention.
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+# No [tool.ruff.lint] select is configured: ruff runs its default ruleset only
+# (E4/E7/E9/F). E501 (line length), I (import order) and UP (pyupgrade) are NOT
+# enforced — do not "fix" 101-103 char lines or legacy typing imports on sight.
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
